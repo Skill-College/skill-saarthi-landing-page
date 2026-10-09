@@ -982,12 +982,22 @@
         font-size: 12px;
         line-height: 1.45;
       }
-      .form-status {
-        min-height: 18px;
-        margin: 16px 0 0;
-        color: var(--green);
-        font-weight: 600;
-        font-size: 13px;
+      .partner-form .form-success {
+        text-align: center;
+        padding: 36px 16px 18px;
+      }
+      .partner-form .form-success h3 {
+        margin: 0 0 10px;
+        font-size: 22px;
+        letter-spacing: -0.03em;
+        color: var(--navy);
+      }
+      .partner-form .form-success p {
+        margin: 0 auto;
+        max-width: 420px;
+        color: var(--muted);
+        font-size: 15px;
+        line-height: 1.6;
       }
       footer {
         background: var(--navy);
@@ -1533,11 +1543,21 @@
             support.
           </p>
           <div class="partner-form">
-            <div class="form-heading">
-              <h3>Partner with Skill Saarthi</h3>
-              <span>Fields marked * are required</span>
+            <div id="partner-form-fields">
+              <div class="form-heading">
+                <h3>Partner with Skill Saarthi</h3>
+                <span>Fields marked * are required</span>
+              </div>
+              <sc-dynamic-form formid="91d0d08c-876e-48be-b4a0-a1bf3fb552c8"></sc-dynamic-form>
             </div>
-            <sc-dynamic-form formid="91d0d08c-876e-48be-b4a0-a1bf3fb552c8"></sc-dynamic-form>
+            <div
+              class="form-success"
+              id="form-success"
+              hidden
+            >
+              <h3>Thank you</h3>
+              <p>We have received your partnership enquiry. We will contact you soon.</p>
+            </div>
             <!-- <div class="form-grid">
               <div class="form-field">
                 <label for="partner-name">Full name *</label
@@ -1647,11 +1667,6 @@
                 </button>
               </div>
             </div> -->
-            <p
-              class="form-status"
-              id="form-status"
-              aria-live="polite"
-            ></p>
           </div>
         </div>
       </section>
@@ -1685,25 +1700,9 @@
       referralsInput.addEventListener("input", updateEstimate)
       annualFeeInput.addEventListener("input", updateEstimate)
 
-      const partnerForm = document.getElementById("partner-form")
-      const formStatus = document.getElementById("form-status")
-      partnerForm.addEventListener("submit", (event) => {
-        event.preventDefault()
-        if (!partnerForm.reportValidity()) return
-        const details = new FormData(partnerForm)
-        const enquiry = [
-          "Skill Saarthi Partnership Enquiry",
-          "",
-          `Name: ${details.get("name")}`,
-          `Mobile: ${details.get("phone")}`,
-          `Email: ${details.get("email")}`,
-          `Organisation / School: ${details.get("organisation")}`,
-          `Role: ${details.get("role")}`,
-          `City: ${details.get("city")}`,
-          `Interest: ${details.get("message") || "Not provided"}`,
-        ].join("\n")
-        formStatus.textContent = "Opening your email app with the partnership enquiry…"
-        window.location.href = `mailto:hello@skill.college?subject=${encodeURIComponent("Skill Saarthi Partnership Enquiry")}&body=${encodeURIComponent(enquiry)}`
+      document.querySelector("sc-dynamic-form").addEventListener("form-submitted", () => {
+        document.getElementById("partner-form-fields").hidden = true
+        document.getElementById("form-success").hidden = false
       })
     </script>
     <script
