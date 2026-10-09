@@ -999,6 +999,13 @@
         font-size: 15px;
         line-height: 1.6;
       }
+      .partner-form .form-error {
+        margin: 16px 0 0;
+        color: #b42318;
+        font-size: 13px;
+        font-weight: 600;
+        line-height: 1.45;
+      }
       footer {
         background: var(--navy);
         color: #bfcae0;
@@ -1549,6 +1556,12 @@
                 <span>Fields marked * are required</span>
               </div>
               <sc-dynamic-form formid="91d0d08c-876e-48be-b4a0-a1bf3fb552c8"></sc-dynamic-form>
+              <p
+                class="form-error"
+                id="form-error"
+                role="alert"
+                hidden
+              ></p>
             </div>
             <div
               class="form-success"
@@ -1700,9 +1713,19 @@
       referralsInput.addEventListener("input", updateEstimate)
       annualFeeInput.addEventListener("input", updateEstimate)
 
-      document.querySelector("sc-dynamic-form").addEventListener("form-submitted", () => {
+      const dynamicForm = document.querySelector("sc-dynamic-form")
+      const formError = document.getElementById("form-error")
+      dynamicForm.addEventListener("form-submitted", () => {
+        formError.hidden = true
         document.getElementById("partner-form-fields").hidden = true
         document.getElementById("form-success").hidden = false
+      })
+      dynamicForm.addEventListener("form-submission-error", (event) => {
+        const error = event.detail?.error
+        formError.textContent =
+          (typeof error === "string" ? error : error?.details?.error) ||
+          "We could not submit the form. Please try again."
+        formError.hidden = false
       })
     </script>
     <script
