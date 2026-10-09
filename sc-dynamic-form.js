@@ -36,6 +36,15 @@
         outline: 2px solid rgba(18, 63, 189, 0.25);
       }
     }
+    input::-webkit-outer-spin-button,
+    input::-webkit-inner-spin-button {
+      /* display: none; <- Crashes Chrome on hover */
+      -webkit-appearance: none;
+      margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+    }
+    input[type="number"] {
+      -moz-appearance: textfield; /* Firefox */
+    }
     .error {
       font-size: 0.9em;
       color: red;
@@ -230,10 +239,17 @@
       display: block;
       font: inherit;
     }
+    .container {
+      container-type: inline-size;
+    }
     form {
       display: grid;
       grid-template-columns: repeat(2, 1fr);
       gap: 1rem;
+
+      @container (width < 650px) {
+        grid-template-columns: 1fr;
+      }
     }
     button[type="submit"] {
       grid-column: 1 / -1;
@@ -252,18 +268,20 @@
         background-color: #0b2f94;
       }
     }
-  `}#t;render(){let e=this.formSubmission(),s=this.formSchema();if(s.isPending)return w`<div>Loading...</div>`;if(s.isError)return w`<div>Error: ${s.error.message}</div>`;let i=s.data.steps?.flatMap(r=>r.groups?.flatMap(n=>n.fields)).toSorted((r,n)=>(r.uiIndex??0)-(n.uiIndex??0));return w`<form
-      @submit=${r=>{console.log("form submit event",r),r.preventDefault(),r.stopPropagation(),this.#t.api.handleSubmit()}}
-    >
-      ${fr(i,r=>r.id,r=>this.#t.field({name:r.id,validators:{onChange:({value:n})=>mr(r,n),onBlur:({value:n})=>mr(r,n)}},n=>w`<field-renderer
-                .field=${r}
-                .fieldApi=${n}
-              ></field-renderer>`))}
+  `}#t;render(){let e=this.formSubmission(),s=this.formSchema();if(s.isPending)return w`<div>Loading...</div>`;if(s.isError)return w`<div>Error: ${s.error.message}</div>`;let i=s.data.steps?.flatMap(r=>r.groups?.flatMap(n=>n.fields)).toSorted((r,n)=>(r.uiIndex??0)-(n.uiIndex??0));return w`<div class="container">
+      <form
+        @submit=${r=>{console.log("form submit event",r),r.preventDefault(),r.stopPropagation(),this.#t.api.handleSubmit()}}
+      >
+        ${fr(i,r=>r.id,r=>this.#t.field({name:r.id,validators:{onChange:({value:n})=>mr(r,n),onBlur:({value:n})=>mr(r,n)}},n=>w`<field-renderer
+                  .field=${r}
+                  .fieldApi=${n}
+                ></field-renderer>`))}
 
-      <button type="submit" ?disabled=${e.isPending}>
-        ${s.data.steps[0]?.metadata?.submitBtnText||"Submit"}
-      </button>
-    </form>`}};_([R({type:String})],ks.prototype,"formId",void 0);ks=_([N("step-renderer")],ks);function mr(t,e){if(typeof t.validations.required=="boolean"?t.validations.required:!1){if(t.type==="checkbox"){if(e===!1||e==="false")return"Please check the checkbox to proceed."}else if(!e||typeof e=="string"&&e.trim()==="")return`${t.label} is required`}}var Ls=class extends ${render(){return w`<app-query-provider>
+        <button type="submit" ?disabled=${e.isPending}>
+          ${s.data.steps[0]?.metadata?.submitBtnText||"Submit"}
+        </button>
+      </form>
+    </div>`}};_([R({type:String})],ks.prototype,"formId",void 0);ks=_([N("step-renderer")],ks);function mr(t,e){if(typeof t.validations.required=="boolean"?t.validations.required:!1){if(t.type==="checkbox"){if(e===!1||e==="false")return"Please check the checkbox to proceed."}else if(!e||typeof e=="string"&&e.trim()==="")return`${t.label} is required`}}var Ls=class extends ${render(){return w`<app-query-provider>
       <step-renderer formId="${this.formId}"></step-renderer>
     </app-query-provider>`}};_([R({type:String})],Ls.prototype,"formId",void 0);Ls=_([N("sc-dynamic-form")],Ls);})();
 /*! Bundled license information:
